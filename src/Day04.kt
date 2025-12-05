@@ -1,21 +1,18 @@
 fun main() {
     fun part1(input: List<String>): Int {
-        return getAccessibleRolls(input).size
+        return getAccessibleRolls(convertToMatrix(input)).size
     }
 
     fun part2(input: List<String>): Int {
         var accessibleRolls = 0
         var previouslyAccessibleRolls = emptyList<Pair<Int, Int>>()
-        val rolls = input.toMutableList()
+        val rolls = convertToMatrix(input)
         while (true) {
             val accessibleRollsPositions = getAccessibleRolls(rolls)
             accessibleRollsPositions.groupBy { it.first }.forEach { (i, pairs) ->
-                val row: String = rolls[i]
-                val sb = StringBuilder(row)
                 pairs.forEach { (_, col) ->
-                    sb[col] = '.'
+                    rolls[i][col] = 0
                 }
-                rolls[i] = sb.toString()
             }
             if (previouslyAccessibleRolls == accessibleRollsPositions) break
             accessibleRolls += accessibleRollsPositions.size
@@ -37,18 +34,16 @@ fun main() {
     part2(input).println()
 }
 
-private fun getAccessibleRolls(input: List<String>): List<Pair<Int, Int>> {
+private fun getAccessibleRolls(input: Array<IntArray>): List<Pair<Int, Int>> {
     val accessibleRolls = mutableListOf<Pair<Int, Int>>()
     for (row in input.indices) {
         for (col in input[row].indices) {
-            if (input[row][col] != '@') continue
+            if (input[row][col] != 1) continue
             var adjacentRollsCount = 0
             val positions = getPositions(row, col)
             for (position in positions) {
                 val (row, col) = position
-                input.getOrNull(row)?.getOrNull(col)?.let {
-                    if (it == '@') adjacentRollsCount++
-                }
+                adjacentRollsCount += input.getOrNull(row)?.getOrNull(col) ?: 0
             }
             if (adjacentRollsCount < 4) {
                 accessibleRolls.add(Pair(row, col))
@@ -56,6 +51,12 @@ private fun getAccessibleRolls(input: List<String>): List<Pair<Int, Int>> {
         }
     }
     return accessibleRolls
+}
+
+fun convertToMatrix(input: List<String>): Array<IntArray> {
+    return Array(input.size) { idx ->
+        input[idx].map { if (it == '.') 0 else 1 }.toIntArray()
+    }
 }
 
 private fun getPositions(
