@@ -41,8 +41,10 @@ tasks.register("createANewDay") {
 
             // Or read a large test input from the `src/Day${day}_test.txt` file:
             val testInput = readInput("Day${day}_test")
+            println(part1(testInput))
             check(part1(testInput) == -1)
-            check(part2(testInput) == -1)
+            // println(part2(testInput))
+            // check(part2(testInput) == -1)
 
             // Read the input from the `src/Day$day.txt` file.
             val input = readInput("Day$day")
@@ -61,14 +63,8 @@ tasks.register("createANewDay") {
             if (created && file.name == "Day$day.kt") {
                 file.writeText(template)
             } else {
-                logger.quiet("Seems ${file} was not created")
+                logger.quiet("Seems $file was not created")
             }
         }
     }
-//    val sourceFile = srcDir.file("Day$day.kt").asFile
-//    if(!sourceFile.exists()) {
-//        sourceFile.writeText(template)
-//    } else {
-//        logger.quiet("File $sourceFile does not exist !")
-//    }
 }
