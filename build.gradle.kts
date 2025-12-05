@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
 
 plugins {
-    kotlin("jvm") version "2.2.21"
+    kotlin("jvm") version "2.3.0-RC2"
 }
 
 sourceSets {
@@ -12,12 +12,13 @@ sourceSets {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_24
-    targetCompatibility = JavaVersion.VERSION_24
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_24
+        jvmTarget = JvmTarget.JVM_25
+        freeCompilerArgs.add("-Xreturn-value-checker=full")
     }
 }
 
